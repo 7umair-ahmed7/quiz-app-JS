@@ -63,12 +63,26 @@ let questionSection = document.querySelector(".question-section");
 
 
 
-let questionIndex;
-let score;
+
+function disableBtns() {
+    let arrAllOptionsBtn = Array.from(options);
+    for (const optionBtn of arrAllOptionsBtn) {
+
+        optionBtn.disabled = true
+    }
+}
+function enableBtns() {
+    let arrAllOptionsBtn = Array.from(options);
+    for (const optionBtn of arrAllOptionsBtn) {
+
+        optionBtn.disabled = false;
+    }
+}
+let questionIndex = 0;
+let score = 0
 let questionNum;
 
 function displayQuestion() {
-    questionIndex = 0;
     questionNum = questionIndex + 1;
     questionContainer.innerHTML = questionNum + ". " + questions[questionIndex].question;
     for (let i = 0; i < questions[questionIndex].options.length; i++) {
@@ -79,64 +93,60 @@ function displayQuestion() {
             if (ind === questions[questionIndex].answer - 1) {
                 e.target.style.backgroundColor = "green";
                 nextBtn.style.display = "block";
+                score += 1;
+                console.log("I")
             }
             else {
                 e.target.style.backgroundColor = "red";
                 let ansElement = options[questions[questionIndex].answer - 1]
                 ansElement.style.backgroundColor = "green";
                 nextBtn.style.display = "block";
-            }
 
+            }
+            disableBtns()
         })
     })
 }
 
 displayQuestion()
+
+function reset() {
+    nextBtn.style.display = "none";
+    enableBtns()
+    options.forEach(option => {
+        option.style.backgroundColor = "grey";
+        option.style.display = "block";
+    })
+}
+
 nextBtn.addEventListener("click", (e) => {
+    console.log(score);
 
     if (questionIndex < questions.length - 1) {
+        reset()
         nextBtn.style.display = "none";
         questionIndex++;
         questionNum = questionIndex + 1;
-        questionContainer.innerHTML = questionNum + ". " + questions[questionIndex].question;
-
-        options.forEach(option => {
-            option.style.backgroundColor = "grey";
-        })
-        for (let i = 0; i < questions[questionIndex].options.length; i++) {
-            options[i].innerHTML = questions[questionIndex].options[i];
-        }
-        options.forEach((option, ind) => {
-            option.addEventListener("click", (e) => {
-                if (ind === questions[questionIndex].answer - 1) {
-                    e.target.style.backgroundColor = "green";
-                    nextBtn.style.display = "block";
-
-                }
-                else {
-                    e.target.style.backgroundColor = "red";
-                    let ansElement = options[questions[questionIndex].answer - 1]
-                    ansElement.style.backgroundColor = "green";
-                    nextBtn.style.display = "block";
-                }
-            })
-        })
+        displayQuestion()
     }
 
     else if (questionIndex == questions.length - 1) {
         nextBtn.style.display = "none";
         playAgainBtn.style.display = 'block';
+        questionContainer.innerHTML = `You score is ${score}`;
+        Array.from(options).forEach(el => {
+            el.style.display = "none";
+        })
 
     }
 
 
 })
 playAgainBtn.addEventListener("click", (e) => {
-
     playAgainBtn.style.display = "none";
-    options.forEach(option => {
-        option.style.backgroundColor = "grey";
-    })
+    reset()
+    score = 0;
+    questionIndex = 0
     displayQuestion()
 })
 
