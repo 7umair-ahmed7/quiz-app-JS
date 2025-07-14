@@ -81,31 +81,32 @@ function enableBtns() {
 let questionIndex = 0;
 let score = 0
 let questionNum;
+options.forEach((option, ind) => {
+    option.addEventListener("click", (e) => {
+      
+        if (ind === questions[questionIndex].answer - 1) {
+            e.target.style.backgroundColor = "green";
+            nextBtn.style.display = "block";
+            score++;
+            console.log(score)
+        }
+        else {
+            e.target.style.backgroundColor = "red";
+            let ansElement = options[questions[questionIndex].answer - 1]
+            ansElement.style.backgroundColor = "green";
+            nextBtn.style.display = "block";
 
-function displayQuestion() {
+        }
+        disableBtns()
+    })
+})
+
+ function displayQuestion() {
     questionNum = questionIndex + 1;
     questionContainer.innerHTML = questionNum + ". " + questions[questionIndex].question;
-    for (let i = 0; i < questions[questionIndex].options.length; i++) {
+   for (let i = 0; i < questions[questionIndex].options.length; i++) {
         options[i].innerHTML = questions[questionIndex].options[i];
     }
-    options.forEach((option, ind) => {
-        option.addEventListener("click", (e) => {
-            if (ind === questions[questionIndex].answer - 1) {
-                e.target.style.backgroundColor = "green";
-                nextBtn.style.display = "block";
-                score += 1;
-                console.log("I")
-            }
-            else {
-                e.target.style.backgroundColor = "red";
-                let ansElement = options[questions[questionIndex].answer - 1]
-                ansElement.style.backgroundColor = "green";
-                nextBtn.style.display = "block";
-
-            }
-            disableBtns()
-        })
-    })
 }
 
 displayQuestion()
